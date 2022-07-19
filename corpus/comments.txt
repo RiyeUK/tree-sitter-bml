@@ -1,0 +1,25 @@
+===
+Comments
+===
+
+// Single Line Comment
+// Second Single Line Comment
+
+/* Multi-line comment on one line */
+/* 
+   Multi
+   Line
+   Comment
+   Over
+   Multiple
+   Lines
+*/
+
+---
+
+(source_file
+  (comment)
+  (comment)
+  (comment)
+  (comment)
+)

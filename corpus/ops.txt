@@ -1,0 +1,146 @@
+===
+Binary Operators
+===
+
+a = a + b;
+a = a - b;
+a = a * b;
+a = a / b;
+a = (a + b) - c;
+a = (a / b) * 5;
+a = (a / b) * (a * b) * 2;
+a = 5 + 5;
+a = a - 1;
+a = a * 1;
+
+---
+(source_file
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (parenthesized_expression
+          (binary_expression
+            (identifier)
+            (identifier)))
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (parenthesized_expression
+          (binary_expression
+            (identifier)
+            (identifier)))
+        (number_literal)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (binary_expression
+          (parenthesized_expression
+            (binary_expression
+              (identifier)
+              (identifier)))
+          (parenthesized_expression
+            (binary_expression
+              (identifier)
+              (identifier))))
+        (number_literal)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (number_literal)
+        (number_literal)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (number_literal)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (number_literal))))
+
+===
+Logical Binary Operators
+===
+a = a and b;
+a = a or b;
+a = a == b;
+a = a <> b;
+a = a < b;
+a = a > b;
+a = a <= b;
+a = a >= b;
+
+---
+
+(source_file
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (identifier))))
+
+===
+Unanry Operators
+===
+
+a = not a;
+a = not(a and b);
+
+---

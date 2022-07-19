@@ -1,0 +1,10 @@
+// This is a comment
+// This is another comment
+/* This is a multi
+   line
+*/ Comment
+
+a = 12;
+b = a + 2;
+c = a * b;
+d = c / 5 + (5 * 25);

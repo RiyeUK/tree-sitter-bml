@@ -1,0 +1,31 @@
+===
+Assigning
+===
+
+a = 5;
+b = a + 10;
+c = a;
+c = c * (a + b);
+
+---
+
+(source_file
+    (assignment_statement
+      (identifier)
+      (number_literal))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (number_literal)))
+    (assignment_statement
+      (identifier)
+      (identifier))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (identifier)
+        (parenthesized_expression
+          (binary_expression
+            (identifier)
+            (identifier))))))

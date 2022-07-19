@@ -1,0 +1,125 @@
+===
+Indexing
+===
+
+a[0] = 2;
+b = a[0];
+---
+
+(source_file
+  (assignment_statement
+    (subscript_expression
+      (identifier)
+      (number_literal))
+    (number_literal))
+  (assignment_statement
+    (identifier)
+    (subscript_expression
+      (identifier)
+      (number_literal))))  
+  
+===
+declaration
+===
+
+a = Boolean[];
+a = Boolean[2];
+
+---
+    (source_file
+      (assignment_statement
+        (identifier)
+        (array_declaration))
+      (assignment_statement
+        (identifier)
+        (array_declaration
+          (number_literal))))
+===
+declaration types
+===
+
+a = Boolean[];
+a = Boolean[];
+a = Date[];
+a = Float[];
+a = Integer[];
+a = String[];
+
+---
+
+    (source_file
+      (assignment_statement
+        (identifier)
+        (array_declaration))
+      (assignment_statement
+        (identifier)
+        (array_declaration))
+      (assignment_statement
+        (identifier)
+        (array_declaration))
+      (assignment_statement
+        (identifier)
+        (array_declaration))
+      (assignment_statement
+        (identifier)
+        (array_declaration))
+      (assignment_statement
+        (identifier)
+        (array_declaration)))
+    
+===
+1-d Arrays
+===
+
+a = Boolean[];
+a = Boolean[1];
+a = a[0];
+
+---
+
+    (source_file
+      (assignment_statement
+        (identifier)
+        (array_declaration))
+      (assignment_statement
+        (identifier)
+        (array_declaration
+          (number_literal)))
+      (assignment_statement
+        (identifier)
+        (subscript_expression
+          (identifier)
+          (number_literal))))
+
+===
+2-d Arrays
+===
+
+a = Boolean[2][2];
+a = Boolean[2][2];
+a = Boolean[][];
+
+a[2][2] = true;
+
+---
+
+    (source_file
+      (assignment_statement
+        (identifier)
+        (array_declaration
+          (number_literal)
+          (number_literal)))
+      (assignment_statement
+        (identifier)
+        (array_declaration
+          (number_literal)
+          (number_literal)))
+      (assignment_statement
+        (identifier)
+        (array_declaration))
+      (assignment_statement
+        (subscript_expression
+          (identifier)
+          (number_literal)
+          (number_literal))
+        (true)))

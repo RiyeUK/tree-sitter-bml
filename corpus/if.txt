@@ -1,0 +1,69 @@
+===
+If Statement
+===
+
+if (not a and b) {
+    c = true;   
+}
+
+if (a or b) {
+    c = true;
+} else {
+    c = false;
+}
+
+if (a + b <> 50 and b > 10) {
+  c = true;
+} elif (a or b) {
+  c = b;
+}
+
+---
+
+(source_file
+  (if_statement
+    (parenthesized_expression
+      (binary_expression
+        (unary_expression
+          (identifier))
+        (identifier)))
+    (block
+        (assignment_statement
+          (identifier)
+          (true))))
+  (if_statement
+    (parenthesized_expression
+      (binary_expression
+        (identifier)
+        (identifier)))
+    (block
+        (assignment_statement
+          (identifier)
+          (true)))
+    (block
+        (assignment_statement
+          (identifier)
+          (false))))
+  (if_statement
+    (parenthesized_expression
+      (binary_expression
+        (binary_expression
+          (binary_expression
+            (identifier)
+            (identifier))
+          (number_literal))
+        (binary_expression
+          (identifier)
+          (number_literal))))
+    (block
+        (assignment_statement
+          (identifier)
+          (true)))
+        (parenthesized_expression
+          (binary_expression
+            (identifier)
+            (identifier)))
+        (block
+          (assignment_statement
+            (identifier)
+            (identifier)))))

@@ -1,0 +1,73 @@
+===
+Function Dot access
+===
+
+a = test.a();
+test.a.b();
+test.a(true);
+
+---
+
+    (source_file
+      (assignment_statement
+        (identifier)
+        (call_expression
+          (identifier)
+          (identifier)
+          (argument_list)))
+      (call_expression
+        (identifier)
+        (identifier)
+        (identifier)
+        (argument_list))
+      (call_expression
+        (identifier)
+        (identifier)
+        (argument_list
+          (true))))
+===
+Functions
+===
+
+a = test(a, b, (a or b));
+test();
+test(a,b,c);
+
+---
+
+(source_file
+(assignment_statement
+(identifier)
+(call_expression
+(identifier)
+(argument_list
+(identifier)
+(identifier)
+(parenthesized_expression
+(binary_expression
+(identifier)
+(identifier))))))
+(call_expression
+(identifier)
+(argument_list))
+(call_expression
+(identifier)
+(argument_list
+(identifier)
+(identifier)
+(identifier))))
+
+===
+Print
+===
+
+print "add";
+print("add");
+
+---
+(source_file
+    (print
+      (string_literal))
+    (print
+      (parenthesized_expression
+        (string_literal))))

@@ -1,0 +1,31 @@
+===
+Strings
+===
+
+a = "This is a string";
+b = 'This is a string';
+c = "We " + "can " + " concatinate";
+a = string(50);
+
+---
+
+(source_file
+    (assignment_statement
+      (identifier)
+      (string_literal))
+    (assignment_statement
+      (identifier)
+      (string_literal))
+    (assignment_statement
+      (identifier)
+      (binary_expression
+        (binary_expression
+          (string_literal)
+          (string_literal))
+        (string_literal)))
+    (assignment_statement
+      (identifier)
+      (call_expression
+        (identifier)
+        (argument_list
+          (number_literal)))))
