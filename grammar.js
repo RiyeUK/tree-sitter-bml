@@ -1,4 +1,4 @@
-module.exports = grammar( {
+module.exports = grammar({
   name: 'bml',
 
   extras: $ => [
@@ -10,46 +10,38 @@ module.exports = grammar( {
   word: $ => $.identifier,
 
   rules: {
-    source_file: $ => repeat(choice(
-      $._statement,
-    ) ),
-    
+    source_file: $ => repeat($._statement),
+
     _statement: $ => choice(
       $._simple_statement,
-      $.return_statement,
       $.if_statement,
-      // $.for_statement,
+      $.for_statement,
       $.block
     ),
-    
-    _statement_list: $ => choice(
-      seq(
-        $._statement,
-        repeat(seq(';', $._statement)),
-      )
-    ),
-    
-    _simple_statement: $ => seq(choice(
-      $._expression,
-      $.assignment_statement,
-      $.break_statement,
-      $.continue_statement
+
+    _simple_statement: $ => seq(
+      choice(
+        $._expression,
+        $.return_statement,
+        $.assignment_statement,
+        $.break_statement,
+        $.continue_statement
       ),
       ';'
     ),
-    
+
     assignment_statement: $ => seq(
       field('left', $._expression),
-      field('operator', '=', ),
+      field('operator', '='),
       field('right', $._expression)
     ),
-    
+
     break_statement: $ => 'break',
-    
+
     continue_statement: $ => 'continue',
-    
-    return_statement: $ => seq('return', optional($._expression),';'),
-    
+
+    return_statement: $ => seq('return', optional($._expression)),
+
     if_statement: $ => seq(
       'if',
       field('condition', $.parenthesized_expression),
@@ -57,22 +49,38 @@ module.exports = grammar( {
       optional(choice(
         repeat(seq(
           'elif',
-          field('condition',$.parenthesized_expression),
-          field('alternative',$.block)
+          field('condition', $.parenthesized_expression),
+          field('alternative', $.block)
         )),
+        seq(
+          repeat(seq(
+            'elif',
+            field('condition', $.parenthesized_expression),
+            field('alternative', $.block)
+          )),
+          optional(seq('else', field('alternative', $.block)))
+        ),
         seq(
           'else',
           field('alternative', $.block)
         )
       ))
     ),
-    
+
     block: $ => seq(
       '{',
-      optional($._statement_list),
+      optional(repeat($._statement)),
       '}'
     ),
-    
+
+    for_statement: $ => seq(
+      'for',
+      field('itorator', $._expression),
+      'in',
+      field('array', $._expression),
+      $.block
+    ),
+
     comment: $ => token(choice(
       seq('//', /.*/),
       seq(
@@ -81,7 +89,7 @@ module.exports = grammar( {
         '/'
       )
     )),
-    
+
     _expression: $ => choice(
       $.binary_expression,
       $.unary_expression,
@@ -96,61 +104,65 @@ module.exports = grammar( {
       $.print,
       $.subscript_expression,
       $.array_declaration,
+      $.dot_expression,
     ),
-    
-    _type: $ => choice(
-      'Boolean',
-      'Date',
-      'Float',
-      'Integer',
-      'String'
+
+    type: $ => choice(
+      'boolean',
+      'date',
+      'float',
+      'integer',
+      'string'
     ),
-    
-    subscript_expression: $ => prec(13,seq(
+
+    dot_expression: $ => prec(13, seq(
+      field('identifyer', $.identifier), '.', $.identifier,
+      repeat(seq('.', $.identifier))
+    )),
+
+    subscript_expression: $ => prec(13, seq(
       field('argument', $.identifier),
       '[',
-      field('index', $._expression),
+      field('index', $.number_literal),
       ']',
-      repeat(seq('[',
-        field('index', $._expression),
-        ']'
-      ))
+      optional(
+        seq(
+          '[',
+          field('index', $.number_literal),
+          ']'
+        ),
+      ),
     )),
-    
-    array_declaration: $ => prec.left(1,seq(
-      $._type,
-      repeat(seq(
+
+    array_declaration: $ => prec.left(1, seq(
+      $.type,
+      '[',
+      optional(field('index', $.number_literal)),
+      ']',
+      optional(seq(
         '[',
-        optional(field('size', $._expression)),
+        optional(field('size', $.number_literal)),
         ']'
       )),
     )),
 
-    // array_statement: $ => prec(13,seq(
-    //   field('argument', $._expression),
-    //   repeat(seq(
-    //     '[',
-    //     optional(field('length',/[0-9]+/)),
-    //     ']'
-    //   ))
-    // )),
-    
-    call_expression: $ => prec(13,seq(
-      field('function', $.identifier),
-      repeat(seq(
-        '.',
-        $.identifier
-      )),
-      field('arguments',$.argument_list)
+    call_expression: $ => prec(13, seq(
+      field('function', choice($.identifier, $.dot_expression, $.type)),
+      field('arguments', $.argument_list)
     )),
-    
-    argument_list: $ => seq('(', commaSep($._expression), ')'),
-    
-    unary_expression: $ => prec.left(13, seq(
-      field('operator', choice('not', '-', '+')),
+
+    argument_list: $ => seq(
+      '(',
+      repeat(seq($._expression,',')),
+      optional($._expression),
+      ')'
+    ),
+
+    unary_expression: $ => prec.right(14, seq(
+      field('operator', choice('not', 'NOT', '-', '+')),
       field('argument', $._expression)
     )),
-        
+
     binary_expression: $ => {
       const table = [
         ['+', 10],
@@ -158,16 +170,18 @@ module.exports = grammar( {
         ['*', 11],
         ['/', 11],
         ['%', 11],
-        ['and',2],
+        ['and', 2],
+        ['AND', 2],
         ['or', 1],
+        ['OR', 1],
         ['==', 6],
         ['<>', 6],
-        ['>' , 7],
-        ['<' , 7],
+        ['>', 7],
+        ['<', 7],
         ['<=', 7],
         ['>=', 7],
       ];
-      
+
       return choice(...table.map(([operator, precedence]) => {
         return prec.left(precedence, seq(
           field('left', $._expression),
@@ -176,35 +190,27 @@ module.exports = grammar( {
         ))
       }));
     },
-    
+
     identifier: $ => /[a-zA-Z_]\w*/,
-  
+
     number_literal: $ => token(/[0-9]+\.?[0-9]*|\.[0-9]+/),
-  
+
     string_literal: $ => token(
       choice(
-        seq('"', repeat(/[^"]/),'"'),
-        seq('\'', repeat(/[^']/),'\'')
+        seq('"', repeat(/[^"]/), '"'),
+        seq('\'', repeat(/[^']/), '\'')
       )
     ),
-  
+
     parenthesized_expression: $ => seq(
       '(',
       $._expression,
       ')',
     ),
-    
+
     print: $ => seq('print', $._expression),
     true: $ => 'true',
     false: $ => 'false',
     null: $ => 'null',
   }
-} )
-
-function commaSep (rule) {
-  return optional(commaSep1(rule))
-}
-
-function commaSep1 (rule) {
-  return seq(rule, repeat(seq(',', rule)))
-}
+})
